@@ -1,5 +1,6 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const input = document.querySelector('#datetime-picker');
 const btn = document.querySelector('button[data-start]');
@@ -16,7 +17,7 @@ const options = {
         const ms = selectedDates[0].getTime();
         if (options.defaultDate.getTime() > ms) {
             btn.disabled = true;
-            window.alert('Please choose a date in the future');
+            Notify.failure('Please choose a date in the future');
         } else {
             btn.disabled = false;
             timer = ms;
@@ -36,29 +37,27 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 };
 
-function dataFormater(data) {
-    if (data < 10) {
-        return '0' + data;
-    } else {
-        return data;
-    };
+function addLeadingZero(data) {
+    return data.toString().padStart(2, '0');
 }
 
 flatpickr(input, options);
 
 btn.addEventListener('click', () => {
     btn.disabled = true;
-    timer = timer - new Date().getTime()
+    input.disabled = true;
+    timer = timer - new Date().getTime();
     const ticker = setInterval(() => {
         const { days, hours, minutes, seconds } = convertMs(timer);
-        document.querySelector('span[data-days]').innerHTML = dataFormater(days);
-        document.querySelector('span[data-hours]').innerHTML = dataFormater(hours);
-        document.querySelector('span[data-minutes]').innerHTML = dataFormater(minutes);
-        document.querySelector('span[data-seconds]').innerHTML = dataFormater(seconds);
+        document.querySelector('span[data-days]').innerHTML = addLeadingZero(days);
+        document.querySelector('span[data-hours]').innerHTML = addLeadingZero(hours);
+        document.querySelector('span[data-minutes]').innerHTML = addLeadingZero(minutes);
+        document.querySelector('span[data-seconds]').innerHTML = addLeadingZero(seconds);
         console.log(timer);
         if (timer < 1000) {
             clearInterval(ticker);
-            btn.disabled = false;
+            Notify.info('The time has come!');
+            input.disabled = false;
         };
         timer -= 1000;
     }, 1000);

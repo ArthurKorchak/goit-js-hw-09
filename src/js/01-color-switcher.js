@@ -6,9 +6,9 @@ let timerId;
 
 startBtn.addEventListener('click', () => {
     if (!control) {
+        control = true;
         timerId = setInterval(() => {
         body.style.backgroundColor = getRandomHexColor();
-        control = true;
         }, 1000);
     };
 });

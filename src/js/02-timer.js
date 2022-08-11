@@ -14,13 +14,12 @@ const options = {
     defaultDate: new Date(),
     minuteIncrement: 1,
     onClose(selectedDates) {
-        const ms = selectedDates[0].getTime();
-        if (options.defaultDate.getTime() > ms) {
+        timer = selectedDates[0].getTime();
+        if (options.defaultDate.getTime() > timer) {
             btn.disabled = true;
             Notify.failure('Please choose a date in the future');
         } else {
             btn.disabled = false;
-            timer = ms;
         };
     },
 };
@@ -39,7 +38,7 @@ function convertMs(ms) {
 
 function addLeadingZero(data) {
     return data.toString().padStart(2, '0');
-}
+};
 
 flatpickr(input, options);
 
@@ -53,7 +52,6 @@ btn.addEventListener('click', () => {
         document.querySelector('span[data-hours]').innerHTML = addLeadingZero(hours);
         document.querySelector('span[data-minutes]').innerHTML = addLeadingZero(minutes);
         document.querySelector('span[data-seconds]').innerHTML = addLeadingZero(seconds);
-        console.log(timer);
         if (timer < 1000) {
             clearInterval(ticker);
             Notify.info('The time has come!');

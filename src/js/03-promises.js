@@ -1,7 +1,7 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 Notify.init({
   useIcon: false,
-  timeout: 10000,
+  timeout: 5000,
 });
 const form = document.querySelector('.form');
 
